@@ -1,0 +1,34 @@
+
+
+        Log.i("File", this.getApplicationContext().getFilesDir().getAbsolutePath());
+        String json = "";
+        Gson gson = new GsonBuilder().create();
+        new AsyncTaskJSONPost().execute();
+
+        // imagem job
+        new AsyncTaskShowImage().execute("http://192.168.0.25:5500/01.jpg");
+
+        // imagem aula
+        //new AsyncTaskShowImage().execute("http://10.7.24.226:5500/01.jpg");
+
+        File file = new File(this.getApplicationContext().getFilesDir(), "json.json");
+        try {
+            if (!file.exists()) {
+                FileOutputStream fos = new FileOutputStream(file);
+                DataOutputStream dos = new DataOutputStream(fos);
+                dos.write(json.getBytes() );
+            }
+            FileInputStream fis= new FileInputStream(file);
+            DataInputStream din= new DataInputStream(fis);
+            byte[] data= new byte[din.available()];
+            din.readFully(data);
+            String content= new String(data);
+            Produto p = gson.fromJson(content, Produto.class);
+            Log.i("File",file.getAbsolutePath());
+            Log.i("File",content);
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
